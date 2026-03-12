@@ -1,6 +1,9 @@
 import pool from "../config/conn.js";
 
-async function create(name, surname, email, password, cpf){
+
+async function create(user){
+
+    const { name , surname , email, password, cpf } = user 
 
     try{
 
@@ -8,21 +11,19 @@ async function create(name, surname, email, password, cpf){
 
         const [rows] = await pool.execute(sql, [name, surname, email, password, cpf])
 
-        console.log(rows)
-
         return rows
 
     }catch(err){
 
-        console.log(`Erro ao inserir no banco:` + err)
+        throw(err)
 
     }
 
 }
 
 async function userFindById(id){
-
-    try{
+    
+      try{
 
         const sql = 'SELECT * FROM users where id = ?'
 
@@ -30,13 +31,13 @@ async function userFindById(id){
 
         console.log(rows)
 
-        return rows
+        return rows[0]
 
     }catch(err){
 
-        console.log(`Erro ao inserir no banco:` + err)
+        throw (err)
 
     }
 }
 
-export { create, userFindById}
+export {create, userFindById}
