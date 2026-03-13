@@ -1,4 +1,10 @@
-import {create, userFindById} from './src/repositories/userRepository.js'
+import { createUser } from './src/controllers/userController.js';
 
-//create(`name`, `surname`, `email`, `password`, `cpf`)
-userFindById(2)
+
+await createUser({
+    name: "João",
+    surname: "Silva",
+    email: "121251@email.com",
+    password: "senha_super_segura",
+    cpf: "13222143522"
+});

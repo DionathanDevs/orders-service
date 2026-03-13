@@ -1,11 +1,13 @@
 import pool from "../config/conn.js";
 
 
-async function create(user){
+async function create(user) {
 
-    const { name , surname , email, password, cpf } = user 
+    const { name, surname, email, password, cpf } = user
+    
 
-    try{
+
+    try {
 
         const sql = 'INSERT INTO users (name, surname, email, password, cpf) VALUES (?, ?, ?, ?, ?)'
 
@@ -13,17 +15,17 @@ async function create(user){
 
         return rows
 
-    }catch(err){
+    } catch (err) {
 
-        throw(err)
+        throw (err)
 
     }
 
 }
 
-async function userFindById(id){
-    
-      try{
+async function userFindById(id) {
+
+    try {
 
         const sql = 'SELECT * FROM users where id = ?'
 
@@ -33,11 +35,31 @@ async function userFindById(id){
 
         return rows[0]
 
-    }catch(err){
+    } catch (err) {
 
         throw (err)
 
     }
 }
 
-export {create, userFindById}
+async function queryUserEmail(email){
+
+try {
+    
+const sql = 'SELECT email FROM users where email = ?'
+
+const [rows] = await pool.execute(sql, [email])
+
+return rows[0]
+
+}catch (err) {
+
+    throw (err)
+
+}
+
+
+
+}
+
+export { create, userFindById , queryUserEmail }
