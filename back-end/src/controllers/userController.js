@@ -1,4 +1,4 @@
-import { create, userFindById, queryUserEmail} from '../repositories/userRepository.js'
+import { create, userFindById, queryUserEmail, queryUserCpf} from '../repositories/userRepository.js'
 import User from '../models/userModel.js'
 import { hashData } from '../utils/argon.js'
 
@@ -7,9 +7,8 @@ import { hashData } from '../utils/argon.js'
 
 async function createUser(req, res){
     
-const {name, surname, email, cpf} = req
+const {name, surname, email, password, cpf} = req
 
-let password = req.password
 
 if(!name){
     return res.status(401).json({
@@ -41,7 +40,28 @@ if(!cpf){
         message: 'name is required'
     })
 }
-// valicao de cpf aqui se quiser
+
+const validateCpf = await queryUserCpf(cpf)
+
+
+if(queryUserCpf.err){
+
+    console.log('ERRO VALIDAR CPF' + err)
+
+    return res.status(401).json({
+        success: false,
+        message: 'Erro ao validar cpf, consulte o suporte.'
+    })
+
+}
+
+if(validateCpf){
+    return res.status(401).json({
+        sucess: false,
+        message: 'CPF ja cadastrado'
+    })
+}
+
 const validateEmail = await queryUserEmail(email)
 
 if(queryUserEmail.err){
@@ -74,9 +94,7 @@ if(!passCript){
     })
 }
 
-password = passCript
-
-const user = new User(name, surname, email, password, cpf)
+const user = new User(name, surname, email, passCript, cpf)
 
 await create(user)
 
@@ -84,7 +102,7 @@ console.log('Usuario cadastrado com sucesso!')
 
 return res.status(200).json({
     success: true,
-     message: 'Usuario cadastrado com sucesso!'
+    message: 'Usuario cadastrado com sucesso!'
 })
 
 }

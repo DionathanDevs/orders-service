@@ -17,4 +17,18 @@ return console.log('Erro:' + err)
 
 }
 
+async function verifyHashData(data, dataInput){
+    try{
+      if(await argon2.verify(data, dataInput)){
+        return true
+      }else{
+        return false
+      }
+    }catch(err){
+
+        throw err
+        
+    }
+}
+
 export { hashData }
