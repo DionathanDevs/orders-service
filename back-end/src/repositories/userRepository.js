@@ -1,14 +1,15 @@
+import 'dotenv/config'
 import pool from "../config/conn.js";
 
 
 async function create(user) {
 
-    const { name, surname, email, password, cpf } = user
+    const { name, surname, email, password, cpf , organization} = user
     
     try {
 
-        const sql = 'INSERT INTO users (name, surname, email, password, cpf) VALUES (?, ?, ?, ?, ?)'
-        const [rows] = await pool.execute(sql, [name, surname, email, password, cpf])
+        const sql = 'INSERT INTO users (name, surname, email, password, cpf, organization) VALUES (?, ?, ?, ?, ?, ?)'
+        const [rows] = await pool.execute(sql, [name, surname, email, password, cpf, organization])
 
         return rows
 
@@ -72,14 +73,14 @@ async function queryEmailAndPass(email){
 
 try{
 
-    const sql = 'SELECT id, nam, surname, email, password FROM users where email = ?'
+    const sql = 'SELECT id, name, surname, email, password, organization FROM users where email = ?'
     const [rows] = await pool.execute(sql, [email])
 
     return rows[0]
 
 }catch(err){
 
-return 'Erro ao consultar email:' + err
+throw err
 
 }
 

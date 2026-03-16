@@ -1,35 +1,48 @@
 import jwt from  'jsonwebtoken'
 
-
 const auth = (req, res, next) => {
 
-const token = req.headers['authorization']
+const authHeader = req.headers.authorization
 
-if(!token){
-    return res.status(403).json({
+if(!authHeader){
+    return res.status(401).json({
         success: false,
-        message: 'Token invalido!'
+        message: 'Token não fornecido. Acesso negado.'
     })
 }
 
-jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+const parts = authHeader.split(' ')
 
-if(err) return res.status(403).json({
-    succes: false,
-    message: 'Token invalido!'
-})
+const [scheme, token] = parts
 
-req.user = user
+if (!/^Bearer$/i.test(scheme)) {
+    return res.status(401).json({ error: "Token malformatado" });
+}
 
-res.status(200).json({
-    success: true,
-    message: token
-})
+  try {
 
-next()
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!decoded.id || !decoded.organization || !decoded.name) {
+        return res.status(401).json({ success: false, message: "Token sem identificação de usuário." });
+        
+    }
+       req.user = {
+        id: decoded.id,
+        organization: decoded.organization,
+        name: decoded.name
+    };
+
+        return next(); 
+        
+    } catch (err) {
+        return res.status(401).json({
+            success: false,
+            message: "Token inválido ou expirado."
+        });
+    }
 
 
-})
 
 }
 

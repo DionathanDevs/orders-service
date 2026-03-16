@@ -1,110 +1,72 @@
-import { create, userFindById, queryUserEmail, queryUserCpf} from '../repositories/userRepository.js'
-import User from '../models/userModel.js'
-import { hashData } from '../utils/argon.js'
+import 'dotenv/config'
+import { userService } from "../services/userService.js"
 
-
-
-
-async function createUser(req, res){
+async function userController(req, res){
     
-const {name, surname, email, password, cpf} = req
+const {name, surname, email, password, cpf, organization} = req.body
 
 
 if(!name){
-    return res.status(401).json({
+    return res.status(400).json({
         success: false,
-        message: 'name is required'
+        message: 'Nome e obrigatorio'
     })
 }
 if(!surname){
-    return res.status(401).json({
+    return res.status(400).json({
         success: false,
-        message: 'surname is required'
+        message: 'Sobrenome e obrigatorio'
     })
 }
 if(!email){
-    return res.status(401).json({
+    return res.status(400).json({
         success: false,
-        message: 'email is required'
+        message: 'Email e obrigatorio'
     })
 }
 if(!password){
-    return res.status(401).json({
+    return res.status(400).json({
         success: false,
-        message: 'name is required'
+        message: 'Senha e obrigatorio'
     })
 }
 if(!cpf){
-    return res.status(401).json({
+    return res.status(400).json({
         success: false,
-        message: 'name is required'
+        message: 'Cpf e obrigatorio'
     })
 }
 
-const validateCpf = await queryUserCpf(cpf)
-
-
-if(queryUserCpf.err){
-
-    console.log('ERRO VALIDAR CPF' + err)
-
-    return res.status(401).json({
+if(!organization){
+    return res.status(400).json({
         success: false,
-        message: 'Erro ao validar cpf, consulte o suporte.'
-    })
-
-}
-
-if(validateCpf){
-    return res.status(401).json({
-        sucess: false,
-        message: 'CPF ja cadastrado'
+        message: 'Organizacao e obrigatorio'
     })
 }
 
-const validateEmail = await queryUserEmail(email)
+try{
 
-if(queryUserEmail.err){
+const userWasCreated = await userService(name, surname, email, password, cpf, organization)
 
-    console.log('ERRO VALIDAR EMAIL' + err)
-
-    return res.status(401).json({
+if(!userWasCreated){
+    return res.status(400).json({
         success: false,
-        message: 'Erro ao validar email, consulte o suporte.'
-    })
-
-}
-
-if(validateEmail){
-
-    console.log('E-mail ja cadastrado, por favor, utilize outro.')
-
-    return res.status(401).json({
-        success: false,
-        message: 'E-mail ja cadastrado, por favor, utilize outro.'
+        message: 'Nao foi possivel criar o usuario'
     })
 }
 
-const passCript = await hashData(password)
-
-if(!passCript){
-    return res.status(401).json({
-        success: false,
-        message: 'Erro ao cadastrar senha, contate o suporte!'
-    })
-}
-
-const user = new User(name, surname, email, passCript, cpf)
-
-await create(user)
-
-console.log('Usuario cadastrado com sucesso!')
-
-return res.status(200).json({
+return res.status(201).json({
     success: true,
-    message: 'Usuario cadastrado com sucesso!'
+    message: 'Usuario criado com sucesso!'
 })
 
+}catch(err){
+    console.error('Erro ao criar usuario:' + err)
+    return res.status(400).json({
+        success: false,
+        message: err.message
+    })
+}
 }
 
-export { createUser }
+export { userController }
