@@ -4,12 +4,12 @@ import pool from "../config/conn.js";
 
 async function create(user) {
 
-    const { name, surname, email, password, cpf , organization} = user
+ 
     
     try {
 
         const sql = 'INSERT INTO users (name, surname, email, password, cpf, organization) VALUES (?, ?, ?, ?, ?, ?)'
-        const [rows] = await pool.execute(sql, [name, surname, email, password, cpf, organization])
+        const [rows] = await pool.execute(sql, [user.name, user.surname, user.getEmail(), user.getPassword(), user.getPassword(), user.getOrganization()])
 
         return rows
 

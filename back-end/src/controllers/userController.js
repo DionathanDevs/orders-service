@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { userService } from "../services/userService.js"
+import { userCreate } from "../services/userCreate.js"
 
 async function userController(req, res){
     
@@ -46,7 +46,7 @@ if(!organization){
 
 try{
 
-const userWasCreated = await userService(name, surname, email, password, cpf, organization)
+const userWasCreated = await userCreate(name, surname, email, password, cpf, organization)
 
 if(!userWasCreated){
     return res.status(400).json({

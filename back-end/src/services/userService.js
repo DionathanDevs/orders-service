@@ -3,7 +3,7 @@ import { create, userFindById, queryUserEmail, queryUserCpf} from '../repositori
 import User from '../models/userModel.js'
 import { hashData } from '../utils/argon.js'
 
-async function userService(name, surname, email, password, cpf, organization) {
+async function userCreate(name, surname, email, password, cpf, organization) {
 
 try {
 
@@ -43,4 +43,26 @@ return true
 
 }
 
-export { userService }
+
+async function updateUser(id, name, surname, email){
+
+try {
+const user = await userFindById(id)
+
+if (user.name !== name) user.name = name
+
+
+
+if(user.surname !== surname) user.surname = surname
+
+if(user.email !== email) user.email = email
+
+
+}catch(err){
+  throw err
+}
+
+
+}
+
+export { userCreate }
