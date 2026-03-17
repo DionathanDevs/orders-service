@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import { create, userFindById, queryUserEmail, queryUserCpf} from '../repositories/userRepository.js'
 import User from '../models/userModel.js'
-import { hashData } from '../utils/argon.js'
+import { hashData } from '../../libraries/utils/argon.js'
 
 async function userCreate(name, surname, email, password, cpf, organization) {
 

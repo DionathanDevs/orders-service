@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import jwt from 'jsonwebtoken'
 import { queryEmailAndPass } from '../repositories/userRepository.js'
-import { verifyHashData } from '../utils/argon.js'
+import { verifyHashData } from '../../libraries/utils/argon.js'
 
 
 async function loginService(email, password){
