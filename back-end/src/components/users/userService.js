@@ -1,19 +1,26 @@
 import 'dotenv/config'
-import { create, userFindById, queryUserEmail, queryUserCpf} from '../repositories/userRepository.js'
-import User from '../models/userModel.js'
+
+import User from './userModel.js'
 import { hashData } from '../../libraries/utils/argon.js'
 
-async function userCreate(name, surname, email, password, cpf, organization) {
+class UserService {
+
+constructor(userRepository){
+  this.userRepository = userRepository
+}
+
+async userCreate(name, surname, email, password, cpf, organization) {
+
 
 try {
 
-const validateCpf = await queryUserCpf(cpf)
+const validateCpf = await userRepository.queryUserCpf(cpf)
 
 if(validateCpf){
   throw new Error('CPF ja cadastrado')
 }
 
-const validateEmail = await queryUserEmail(email)
+const validateEmail = await userRepository.queryUserEmail(email)
 
 if(validateEmail){
 throw new Error('E-mail ja cadastrado')
@@ -29,7 +36,7 @@ if(!passCript){
 
 const user = new User(name, surname, email, passCript, cpf, organization)
 
-const userCreate = await create(user)
+const userCreate = await userRepository.create(user)
 
 if(!userCreate){
 throw new Error('Erro ao cadastrar usuario')
@@ -44,10 +51,10 @@ return true
 }
 
 
-async function updateUser(id, name, surname, email){
+async updateUser(id, name, surname, email){
 
 try {
-const user = await userFindById(id)
+const user = await userRepository.userFindById(id)
 
 if (user.name !== name) user.name = name
 
@@ -57,7 +64,6 @@ if(user.surname !== surname) user.surname = surname
 
 if(user.email !== email) user.email = email
 
-
 }catch(err){
   throw err
 }
@@ -65,4 +71,6 @@ if(user.email !== email) user.email = email
 
 }
 
-export { userCreate }
+}
+
+export default UserService

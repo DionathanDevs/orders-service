@@ -1,10 +1,12 @@
 import 'dotenv/config'
-import pool from "../../config/conn.js";
+import pool from "../../libraries/database/conn.js";
 
 
-async function user(){
-create: async () => {
+class UserRepository {
 
+
+
+async create(user){
     try {
 
         const sql = 'INSERT INTO users (name, surname, email, password, cpf, organization) VALUES (?, ?, ?, ?, ?, ?)'
@@ -18,7 +20,8 @@ create: async () => {
 
     }
 }
-update: async (name,surname,email) => {
+
+async update (name,surname,email) {
     
     try{
 
@@ -30,17 +33,9 @@ update: async (name,surname,email) => {
         throw err
     }
 }
+
 }
  
-
-
-
-
-async function userFindById(id) {
-
-   
-}
-
 async function queryUserEmail(email){
 
 try {
@@ -52,10 +47,27 @@ return rows[0]
 
 }catch (err) {
 
-    throw (err)
+    throw err
 
 }
 
+}
+
+async function userFindById(id){
+    try{
+
+
+    const sql = 'SELECT * users where id = ?'
+
+    const [rows] = await pool.execute(sql, [id])
+
+    return rows[0]
+
+    }catch(err){
+
+     throw err
+
+    }
 }
 
 async function queryUserCpf(cpf){
@@ -90,4 +102,4 @@ throw err
 
 }
 
-export { create, userFindById , queryUserEmail, queryUserCpf, queryEmailAndPass}
+export const userRepository = new UserRepository()
