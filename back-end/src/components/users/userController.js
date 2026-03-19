@@ -30,4 +30,36 @@ return res.status(201).json({
 }
 }
 
-export { userController }
+async function userUpdateController(req, res){
+
+const { name, surname, email } = req.body
+
+const { id } = req.params
+
+try{
+    
+const userWasUpdate = await userService.updateUser(name, surname, email, id)
+
+if(!userWasUpdate){
+    return res.status(404).json({
+        success: false,
+        message: 'Erro ao atualizar os dados, por gentileza, tente novamente. Se o erro persistir, contate o suporte.'
+    })
+}
+
+return res.status(200).json({
+    succes: true,
+    message: 'Dados atualizados com sucesso!'
+})
+
+}catch(err){
+    console.erro('ERRO: ' + err)
+    return res.status(404).json({
+        success: false,
+        message: 'Erro ao atualizar os dados, por gentileza, tente novamente. Caso persista o erro, contate o suporte.'
+    })
+}
+
+}
+
+export { userController, userUpdateController }

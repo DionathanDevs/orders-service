@@ -1,34 +1,25 @@
-import 'dotenv/config'
-
-import {loginService} from '../services/loginService.js'
+import {loginService} from './index.js'
 
 async function loginController(req, res) {
 
 const { email, password } = req.body
 
-if (!email || !password) {
 
-    return res.status(400).json(
-        {
-            success: false,
-            message: 'Email ou senha invalidos'
-        })
-}
 try {
 
-const token = await loginService(email, password)
+const token = await loginService.verifyLogin(email, password)
 
 return res.status(200).json({
     success: true,
     message: 'Login realizado com sucesso.',
     token: token
 })
-
+    
 } catch (err) {
 
 return res.status(401).json({
     success: false,
-    message: err.message
+    message: 'Email ou senha invalido'
 })
 
 }

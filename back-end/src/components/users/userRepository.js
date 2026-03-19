@@ -10,7 +10,7 @@ async create(user){
     try {
 
         const sql = 'INSERT INTO users (name, surname, email, password, cpf, organization) VALUES (?, ?, ?, ?, ?, ?)'
-        const [rows] = await pool.execute(sql, [user.name, user.surname, user.getEmail(), user.getPassword(), user.getPassword(), user.getOrganization()])
+        const [rows] = await pool.execute(sql, [user.name, user.surname, user.getEmail(), user.getPassword(), user.getCpf(), user.getOrganization()])
 
         return rows
 
@@ -21,22 +21,22 @@ async create(user){
     }
 }
 
-async update (name,surname,email) {
+async update (name,surname,email,id) {
     
     try{
 
-        const sql = 'UPDATE INTO users (name, surname, email) VALUES (?, ? , ?)'
+        const sql = 'UPDATE INTO users (name, surname, email) VALUES (?, ? , ?) WHERE id = ?'
 
-        const [rows] = await pool.execute(sql, [name, surname, email])
+        const [rows] = await pool.execute(sql, [name, surname, email, id])
+
+        return rows[0]
 
     }catch(err){
         throw err
     }
 }
 
-}
- 
-async function queryUserEmail(email){
+async queryUserEmail(email){
 
 try {
     
@@ -53,7 +53,7 @@ return rows[0]
 
 }
 
-async function userFindById(id){
+async userFindById(id){
     try{
 
 
@@ -70,7 +70,7 @@ async function userFindById(id){
     }
 }
 
-async function queryUserCpf(cpf){
+async queryUserCpf(cpf){
 
     try {
 
@@ -85,7 +85,7 @@ async function queryUserCpf(cpf){
 
 }
 
-async function queryEmailAndPass(email){
+async queryEmailAndPass(email){
 
 try{
 
@@ -101,5 +101,9 @@ throw err
 }
 
 }
+
+
+}
+ 
 
 export const userRepository = new UserRepository()

@@ -11,16 +11,15 @@ constructor(userRepository){
 
 async userCreate(name, surname, email, password, cpf, organization) {
 
-
 try {
 
-const validateCpf = await userRepository.queryUserCpf(cpf)
+const validateCpf = await this.userRepository.queryUserCpf(cpf)
 
 if(validateCpf){
   throw new Error('CPF ja cadastrado')
 }
 
-const validateEmail = await userRepository.queryUserEmail(email)
+const validateEmail = await this.userRepository.queryUserEmail(email)
 
 if(validateEmail){
 throw new Error('E-mail ja cadastrado')
@@ -36,7 +35,7 @@ if(!passCript){
 
 const user = new User(name, surname, email, passCript, cpf, organization)
 
-const userCreate = await userRepository.create(user)
+const userCreate = await this.userRepository.create(user)
 
 if(!userCreate){
 throw new Error('Erro ao cadastrar usuario')
@@ -51,23 +50,28 @@ return true
 }
 
 
-async updateUser(id, name, surname, email){
+async updateUser(name, surname, email, id){
 
 try {
-const user = await userRepository.userFindById(id)
 
-if (user.name !== name) user.name = name
+const validateEmail = await userRepository.queryUserEmail(email)
 
+if(validateEmail){
+throw new Error('E-mail ja cadastrado')
+ 
+}
 
+const userUpdate = await userRepository.update(name, surname, email, id)
 
-if(user.surname !== surname) user.surname = surname
+if(!userUpdate){
+  throw new Error('Erro ao atualizar usuario.')
+}
 
-if(user.email !== email) user.email = email
+return true
 
 }catch(err){
   throw err
 }
-
 
 }
 

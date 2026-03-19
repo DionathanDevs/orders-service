@@ -1,13 +1,19 @@
-import 'dotenv/config'
 import jwt from 'jsonwebtoken'
-import { queryEmailAndPass } from '../repositories/userRepository.js'
 import { verifyHashData } from '../../libraries/utils/argon.js'
 
+class LoginService {
 
-async function loginService(email, password){
+constructor(loginRepository){
+
+    this.loginRepository = loginRepository
+
+}
+
+async verifyLogin(email, password){
 
 try {
-const user = await queryEmailAndPass(email)
+
+const user = await this.loginRepository.verifyEmailandPass(email)
 
 if (!user) {
 throw new Error('Usuario ou senha invalidos')
@@ -18,6 +24,7 @@ const isPasswordValid = await verifyHashData(user.password, password)
 if (!isPasswordValid) {
 throw new Error('Usuario ou senha invalidos')
 }
+
 
 const token = jwt.sign({ id: user.id, name: user.name, organization: user.organization }, process.env.JWT_SECRET, { expiresIn: '8h' })
 
@@ -32,4 +39,6 @@ return token
 }
 }
 
-export {loginService}
+}
+
+export default LoginService
