@@ -1,50 +1,45 @@
 class User {
-    #email
-    #password
-    #cpf
-    #organization
+  #email;
+  #password;
+  #cpf;
+  #organization;
 
-    constructor(name, surname, email, password, cpf, organization) {
+  constructor(name, surname, email, password, cpf, organization) {
+    this.name = name;
+    this.surname = surname;
+    this.#email = email;
+    this.#password = password;
+    this.#cpf = cpf;
+    this.#organization = organization;
+  }
 
-    this.name = name
-    this.surname = surname
-    this.#email = email
-    this.#password = password
-    this.#cpf = cpf    
-    this.#organization = organization
+  getEmail() {
+    return this.#email;
+  }
 
-    }
+  getOrganization() {
+    return this.#organization;
+  }
 
-    getEmail(){
-        return this.#email
-    }
+  getPassword() {
+    return this.#password;
+  }
 
-    getOrganization(){
-        return this.#organization
-    }
+  getCpf() {
+    return this.#cpf;
+  }
 
-    getPassword(){
-        return this.#password
-    }
+  setEmail(email) {
+    this.#email = email;
+  }
 
-    getCpf(){
-        return this.#cpf
-    }
+  setPassword(password) {
+    this.#password = password;
+  }
 
-    setEmail(email){
-        this.#email = email
-    }
+  setCpf(cpf) {
+    this.#cpf = cpf;
+  }
+}
 
-    setPassword(password){
-        this.#password = password
-    }
-
-    setCpf(cpf){
-        this.#cpf = cpf
-    }
-
-    }
-
-
-
-export default User
+export default User;

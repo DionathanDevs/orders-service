@@ -1,40 +1,23 @@
-import 'dotenv/config'
-import pool from '../../libraries/database/conn.js'
+import 'dotenv/config';
+import pool from '../../libraries/database/conn.js';
 
 class LoginRepository {
-    
-async verifyEmailandPass(email) {
+  async verifyEmailandPass(email) {
+    const sql =
+      'SELECT id, name, surname, email, password, organization from users WHERE email = ?';
 
-try {
+    const [rows] = await pool.execute(sql, [email]);
 
-const sql = 'SELECT id, name, surname, email, password, organization from users WHERE email = ?'
+    return rows[0];
+  }
 
-const [rows] = await pool.execute(sql, [email])
+  async consultDataUser(id) {
+    const sql = 'SELECT * from users where id = ?';
 
-return rows[0]
+    const [rows] = await pool.execute(sql, [id]);
 
-}catch(err){
-    throw err
+    return rows[0];
+  }
 }
 
-}
-
-async consultDataUser(id){
-
-try{
-
-    const sql = 'SELECT * from users where id = ?'
-
-    const [rows] = await pool.execute(sql, [id])
-
-    return rows[0]
-
-}catch(err){
-    throw err
-}
-}
-
-
-}
-
-export const loginRepository = new LoginRepository()
+export const loginRepository = new LoginRepository();
