@@ -19,4 +19,10 @@ CREATE TABLE organizations (
     business_name VARCHAR(50) NOT NULL,
     active BOOLEAN NOT NULL DEFAULT true,
 
-)
+);
+
+CREATE TABLE cars (
+    id int AUTO_INCREMENT primary KEY,
+    model VARCHAR(150),
+    brand VARCHAR(60)
+);

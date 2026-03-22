@@ -11,7 +11,7 @@ async function userController(req, res) {
       email,
       password,
       cpf,
-      organization,
+      organization
     );
 
     if (!userWasCreated) {
@@ -44,7 +44,7 @@ async function userUpdateController(req, res) {
       name,
       surname,
       email,
-      id,
+      id
     );
 
     if (!userWasUpdate) {

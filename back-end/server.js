@@ -3,6 +3,7 @@ import express from 'express';
 import auth from './src/libraries/middlewares/auth/authMiddlewares.js';
 import { userAPI } from './src/components/users/index.js';
 import { loginAPI } from './src/components/login/index.js';
+import { carAPI } from './src/components/cars/index.js';
 
 const app = express();
 const port = 3000;
@@ -19,6 +20,8 @@ app.get('/', (req, res) => {
 app.use('/login', loginAPI);
 
 app.use('/users', auth, userAPI);
+
+app.use('/cars', auth, carAPI);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
