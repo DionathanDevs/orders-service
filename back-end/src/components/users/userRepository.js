@@ -25,11 +25,11 @@ async update (name,surname,email,id) {
     
     try{
 
-        const sql = 'UPDATE INTO users (name, surname, email) VALUES (?, ? , ?) WHERE id = ?'
+        const sql = `UPDATE users SET name = ?, surname = ?, email = ? WHERE id = ?;`
 
         const [rows] = await pool.execute(sql, [name, surname, email, id])
 
-        return rows[0]
+        return rows
 
     }catch(err){
         throw err
@@ -40,7 +40,7 @@ async queryUserEmail(email){
 
 try {
     
-const sql = 'SELECT email FROM users where email = ?'
+const sql = 'SELECT email, id FROM users where email = ?'
 const [rows] = await pool.execute(sql, [email])
 
 return rows[0]

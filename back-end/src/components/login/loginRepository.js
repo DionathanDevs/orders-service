@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import pool from '../../libraries/database/conn.js'
 
 class LoginRepository {

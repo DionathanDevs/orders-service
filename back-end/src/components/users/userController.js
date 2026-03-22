@@ -48,15 +48,15 @@ if(!userWasUpdate){
 }
 
 return res.status(200).json({
-    succes: true,
+    success: true,
     message: 'Dados atualizados com sucesso!'
 })
 
 }catch(err){
-    console.erro('ERRO: ' + err)
+    console.error('ERRO: ' + err)
     return res.status(404).json({
         success: false,
-        message: 'Erro ao atualizar os dados, por gentileza, tente novamente. Caso persista o erro, contate o suporte.'
+        message: err.message || 'Erro ao atualizar os dados, por gentileza, tente novamente. Caso persista o erro, contate o suporte.'
     })
 }
 

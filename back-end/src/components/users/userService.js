@@ -52,22 +52,27 @@ return true
 
 async updateUser(name, surname, email, id){
 
+
 try {
 
-const validateEmail = await userRepository.queryUserEmail(email)
+const validateEmail = await this.userRepository.queryUserEmail(email)
 
-if(validateEmail){
-throw new Error('E-mail ja cadastrado')
- 
+if(validateEmail && Number.parseInt(validateEmail.id) !== Number.parseInt(id)){
+
+throw new Error('Email informado ja esta em uso, por favor, tente outro.')
+
 }
 
-const userUpdate = await userRepository.update(name, surname, email, id)
 
-if(!userUpdate){
-  throw new Error('Erro ao atualizar usuario.')
-}
+const userUpdate = await this.userRepository.update(name, surname, email, id)
 
+if(userUpdate){
 return true
+}else{
+  throw new Error('Erro ao criar usuario.')
+}
+
+
 
 }catch(err){
   throw err
