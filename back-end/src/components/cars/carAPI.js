@@ -6,6 +6,6 @@ import { carCreate, carUpdate } from './carController.js';
 const router = express.Router();
 
 router.post('/', validateCarCreation, carCreate);
-router.put('/', validateCarUpdate, carUpdate);
+router.put('/:id', validateCarUpdate, carUpdate);
 
 export default router;

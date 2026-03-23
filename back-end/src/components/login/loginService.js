@@ -22,7 +22,7 @@ class LoginService {
     const token = jwt.sign(
       { id: user.id, name: user.name, organization: user.organization },
       process.env.JWT_SECRET,
-      { expiresIn: '8h' },
+      { expiresIn: '8h' }
     );
 
     if (!token) {
