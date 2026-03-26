@@ -65,4 +65,17 @@ async function validateGetId(req, res, next) {
   next();
 }
 
-export { validateCreate, validateUpdate, validateGetId };
+async function validadeGetAll(req, res, next) {
+  const organization = req.user.organization;
+
+  if (!organization) {
+    return res.status(404).json({
+      success: false,
+      message: 'Organizacao nao informada.',
+    });
+  }
+
+  next();
+}
+
+export { validateCreate, validateUpdate, validateGetId, validadeGetAll };

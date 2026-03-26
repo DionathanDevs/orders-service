@@ -46,7 +46,7 @@ class UserService {
       Number.parseInt(validateEmail.id) !== Number.parseInt(id)
     ) {
       throw new Error(
-        'Email informado ja esta em uso, por favor, tente outro.',
+        'Email informado ja esta em uso, por favor, tente outro.'
       );
     }
 
@@ -54,7 +54,7 @@ class UserService {
       name,
       surname,
       email,
-      id,
+      id
     );
 
     if (userUpdate) {
