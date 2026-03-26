@@ -1,4 +1,4 @@
-import clientService from 'index.js';
+import { clientService } from './index.js';
 import Client from './clientModel.js';
 
 async function create(req, res) {
@@ -11,8 +11,21 @@ async function create(req, res) {
 
     //criar
     const client = new Client(name, surname, email, cpf);
-    await clientService.create(client, organization);
+    const clientWasCreated = await clientService.create(client, organization);
+
+    if (!clientWasCreated) {
+      return res.status(403).json({
+        success: false,
+        message: clientWasCreated.err || 'Erro ao cadastrar o cliente!',
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: 'Cliente cadastrado com sucesso!',
+    });
   } catch (err) {
+    console.log(err);
     //ajustar status para o correto dps
     res.status(404).json({
       success: false,
