@@ -4,7 +4,7 @@ class ClientRepository {
   async create(client, organization) {
     const sql =
       'INSERT INTO clients (name, surname, email, cpf, organization) VALUES (?, ? , ?, ? , ?)';
-      
+
     const [rows] = await pool.execute(sql, [
       client.name,
       client.surname,

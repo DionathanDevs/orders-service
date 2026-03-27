@@ -9,7 +9,12 @@ CREATE TABLE users (
     active BOOLEAN NOT NULL DEFAULT false,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    organization INT foreign key from organizations
+    organization int,
+    CONSTRAINT organization
+    FOREIGN KEY (organization)
+    REFERENCES organizations (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE 
 );
 
 CREATE TABLE organizations (
@@ -26,7 +31,6 @@ CREATE TABLE cars (
     model VARCHAR(150),
     brand VARCHAR(60)
 );
-
 CREATE TABLE clients (
     id int AUTO_INCREMENT primary key,
     name VARCHAR(50) NOT NULL,
@@ -35,4 +39,9 @@ CREATE TABLE clients (
     cpf CHAR(11) UNIQUE NOT NULL,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    organization int,
+    FOREIGN KEY (organization)
+    REFERENCES organizations (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE 
 );
