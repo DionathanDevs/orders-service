@@ -56,6 +56,40 @@ class UserRepository {
 
     return rows[0];
   }
+
+  async findUserByEmail(verify) {
+    const sql =
+      'SELECT id, email, verify_code, verify_code_date FROM users where email = ?';
+
+    const [rows] = await pool.execute(sql, [verify.email]);
+
+    return rows[0];
+  }
+  async updateVerify(id) {
+    const sql =
+      'UPDATE users set active = ?, verify_code = ?, verify_code_date = ? where id = ? ';
+
+    const [rows] = await pool.execute(sql, [1, null, null, id]);
+
+    return rows;
+  }
+
+  async verifyEmailandPass(login) {
+    const sql =
+      'SELECT id, name, surname, email, password, organization from users WHERE email = ?';
+
+    const [rows] = await pool.execute(sql, [login.getEmail()]);
+
+    return rows[0];
+  }
+
+  async consultDataUser(id) {
+    const sql = 'SELECT * from users where id = ?';
+
+    const [rows] = await pool.execute(sql, [id]);
+
+    return rows[0];
+  }
 }
 
 export const userRepository = new UserRepository();
