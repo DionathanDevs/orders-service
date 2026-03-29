@@ -1,7 +1,8 @@
 import 'dotenv/config';
-
 import User from './userModel.js';
 import { hashData } from '../../libraries/utils/argon.js';
+import emailService from '../../libraries/email/email.js';
+import { transform } from '../../libraries/utils/date.js';
 
 class UserService {
   constructor(userRepository) {
@@ -27,13 +28,32 @@ class UserService {
       throw new Error('Erro ao cadastrar senha');
     }
 
-    const user = new User(name, surname, email, passCript, cpf, organization);
+    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verifyCodeDateExpire = transform(Date.now() + 24 * 60 * 60 * 1000);
+
+    const user = new User(
+      name,
+      surname,
+      email,
+      passCript,
+      cpf,
+      organization,
+      verifyCode,
+      verifyCodeDateExpire
+    );
 
     const userCreate = await this.userRepository.create(user);
 
     if (!userCreate) {
       throw new Error('Erro ao cadastrar usuario');
     }
+
+    emailService.emails.send({
+      from: 'onboarding@resend.dev',
+      to: email,
+      subject: 'Verique seu e-mail.',
+      html: `<p>Seu codigo de verificacao: ${verifyCode}</strong>!</p>`, // dps substituir por um template oficial
+    });
 
     return true;
   }

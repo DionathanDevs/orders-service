@@ -4,7 +4,7 @@ import pool from '../../libraries/database/conn.js';
 class UserRepository {
   async create(user) {
     const sql =
-      'INSERT INTO users (name, surname, email, password, cpf, organization) VALUES (?, ?, ?, ?, ?, ?)';
+      'INSERT INTO users (name, surname, email, password, cpf, organization, verify_code, verify_code_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const [rows] = await pool.execute(sql, [
       user.name,
       user.surname,
@@ -12,6 +12,8 @@ class UserRepository {
       user.getPassword(),
       user.getCpf(),
       user.getOrganization(),
+      user.verifyCode,
+      user.verifyCodeDateExpire,
     ]);
 
     return rows;

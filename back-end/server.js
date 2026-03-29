@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/login', loginAPI);
-app.use('/users', auth, userAPI);
+app.use('/users', userAPI);
 app.use('/cars', auth, carAPI);
 app.use('/clients', auth, clientAPI);
 

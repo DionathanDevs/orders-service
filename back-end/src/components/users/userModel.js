@@ -4,13 +4,24 @@ class User {
   #cpf;
   #organization;
 
-  constructor(name, surname, email, password, cpf, organization) {
+  constructor(
+    name,
+    surname,
+    email,
+    password,
+    cpf,
+    organization,
+    verifyCode,
+    verifyCodeDateExpire
+  ) {
     this.name = name;
     this.surname = surname;
     this.#email = email;
     this.#password = password;
     this.#cpf = cpf;
     this.#organization = organization;
+    this.verifyCode = verifyCode;
+    this.verifyCodeDateExpire = verifyCodeDateExpire;
   }
 
   getEmail() {
