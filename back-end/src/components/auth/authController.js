@@ -1,6 +1,6 @@
 import { authService } from './index.js';
 import Verify from './verifyCodeModel.js';
-import Login from './loginModel.js';
+import Register from './registerModel.js'
 
 async function verifyCodeController(req, res) {
   const { email, verifyCode } = req.body;
@@ -32,8 +32,8 @@ async function loginController(req, res) {
   const { email, password } = req.body;
 
   try {
-    const login = new Login(email, password);
-    const token = await authService.verifyLogin(login);
+  
+    const token = await authService.verifyLogin(email, password);
 
     return res.status(200).json({
       success: true,
@@ -48,6 +48,13 @@ async function loginController(req, res) {
   }
 }
 
-async function registerController(req, res) {}
+async function registerController(req, res) {
+   const { name, surname, email, password, cpf , identifier, corporateName, businessName } = req.body;
+
+   try {
+    const register = new Register(name, surname, email, password, cpf , identifier, corporateName, businessName)
+    const registerWasCreated = await authService.registerUser(register)
+   }
+}
 
 export { verifyCodeController, loginController, registerController };

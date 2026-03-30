@@ -1,5 +1,7 @@
 import { verifyHashData } from '../../libraries/utils/argon.js';
 import jwt from 'jwt';
+import Login from './loginModel.js';
+import transform from '../../libraries/utils/date.js';
 
 class AuthService {
   constructor(userRepository) {
@@ -30,7 +32,8 @@ class AuthService {
     return true;
   }
 
-  async verifyLogin(login) {
+  async verifyLogin(email, password) {
+    const login = new Login(email, password);
     const user = await this.userRepository.verifyEmailandPass(login);
 
     if (!user) {
@@ -57,6 +60,27 @@ class AuthService {
     }
 
     return token;
+  }
+
+  async registerUser(register) {
+     const organization = await organizationService.create()
+
+    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verifyCodeDateExpire = transform(Date.now() + 24 * 60 * 60 * 1000);
+
+    const user = new User(
+      register.name,
+      register.surname,
+      register.email,
+      register.password,
+      register.password,
+      register.cpf,
+      organization.id,
+      verifyCode,
+      verifyCodeDateExpire
+    );
+
+    await this.userRepository.create(user);
   }
 }
 
