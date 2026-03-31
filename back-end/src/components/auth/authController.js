@@ -1,6 +1,6 @@
 import { authService } from './index.js';
 import Verify from './verifyCodeModel.js';
-import Register from './registerModel.js'
+import Register from './registerModel.js';
 
 async function verifyCodeController(req, res) {
   const { email, verifyCode } = req.body;
@@ -32,7 +32,6 @@ async function loginController(req, res) {
   const { email, password } = req.body;
 
   try {
-  
     const token = await authService.verifyLogin(email, password);
 
     return res.status(200).json({
@@ -49,12 +48,48 @@ async function loginController(req, res) {
 }
 
 async function registerController(req, res) {
-   const { name, surname, email, password, cpf , identifier, corporateName, businessName } = req.body;
+  const {
+    name,
+    surname,
+    email,
+    password,
+    cpf,
+    identifier,
+    corporateName,
+    businessName,
+  } = req.body;
 
-   try {
-    const register = new Register(name, surname, email, password, cpf , identifier, corporateName, businessName)
-    const registerWasCreated = await authService.registerUser(register)
-   }
+  try {
+    const register = new Register(
+      name,
+      surname,
+      email,
+      password,
+      cpf,
+      identifier,
+      corporateName,
+      businessName
+    );
+    const registerWasCreated = await authService.registerUser(register);
+
+    if (!registerWasCreated) {
+      return res.status(400).json({
+        success: false,
+        message: 'Erro ao realizar registro, contate o suporte.',
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: 'Registro realizado com sucesso!',
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      success: false,
+      message: err.message || err || 'Erro ao criar registro',
+    });
+  }
 }
 
 export { verifyCodeController, loginController, registerController };

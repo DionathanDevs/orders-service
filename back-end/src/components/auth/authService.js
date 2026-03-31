@@ -1,7 +1,7 @@
 import { verifyHashData } from '../../libraries/utils/argon.js';
-import jwt from 'jwt';
+import jwt from 'jsonwebtoken';
 import Login from './loginModel.js';
-import transform from '../../libraries/utils/date.js';
+import { transform } from '../../libraries/utils/date.js';
 import User from '../users/userModel.js';
 import organizationService from '../organizations/organizationService.js';
 
