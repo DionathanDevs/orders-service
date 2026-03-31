@@ -2,6 +2,8 @@ import { verifyHashData } from '../../libraries/utils/argon.js';
 import jwt from 'jwt';
 import Login from './loginModel.js';
 import transform from '../../libraries/utils/date.js';
+import User from '../users/userModel.js';
+import organizationService from '../organizations/organizationService.js';
 
 class AuthService {
   constructor(userRepository) {
@@ -63,7 +65,7 @@ class AuthService {
   }
 
   async registerUser(register) {
-     const organization = await organizationService.create()
+    const organization = await organizationService.create();
 
     const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
     const verifyCodeDateExpire = transform(Date.now() + 24 * 60 * 60 * 1000);
