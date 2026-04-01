@@ -1,7 +1,7 @@
 import { clientRepository } from './clientRepository.js';
 import ClientService from './clientService.js';
-import clientAPI from './clientAPI.js';
+import clientRoutes from './clientRoutes.js';
 
 const clientService = new ClientService(clientRepository);
 
-export { clientAPI, clientService };
+export { clientRoutes, clientService };

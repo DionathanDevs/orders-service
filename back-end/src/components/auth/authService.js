@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken';
 import Login from './loginModel.js';
 import { transform } from '../../libraries/utils/date.js';
 import User from '../users/userModel.js';
-import organizationService from '../organizations/organizationService.js';
+import { organizationService } from '../organizations/index.js';
+import emailService from '../../libraries/email/email.js';
 
 class AuthService {
   constructor(userRepository) {
@@ -65,7 +66,19 @@ class AuthService {
   }
 
   async registerUser(register) {
-    const organization = await organizationService.create();
+    const organizationWasCreate = await organizationService.create(
+      register.identifier,
+      register.corporateName,
+      register.businessName
+    );
+
+    if (!organizationWasCreate) {
+      return false;
+    }
+
+    const organization = await organizationService.getByIdentifier(
+      register.identifier
+    );
 
     const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
     const verifyCodeDateExpire = transform(Date.now() + 24 * 60 * 60 * 1000);
@@ -82,7 +95,19 @@ class AuthService {
       verifyCodeDateExpire
     );
 
-    await this.userRepository.create(user);
+    const userCreated = await this.userRepository.create(user);
+
+    if (!userCreated) {
+      throw new Error('Erro ao criar usuario.');
+    }
+
+    emailService.emails.send({
+      from: 'onboarding@resend.dev',
+      to: userCreated.email,
+      subject: 'Verique seu e-mail.',
+      html: `<p>Seu codigo de verificacao: ${verifyCode}</strong>!</p>`, // dps substituir por um template oficial
+    });
+    return true;
   }
 }
 

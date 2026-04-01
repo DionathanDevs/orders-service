@@ -1,6 +1,6 @@
 import AuthService from './authService.js';
-import authAPI from './authAPI.js';
+import authRoutes from './authRoutes.js';
 import { userRepository } from '../users/userRepository.js';
 const authService = new AuthService(userRepository);
 
-export { authService, authAPI };
+export { authService, authRoutes };

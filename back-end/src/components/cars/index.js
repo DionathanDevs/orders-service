@@ -1,7 +1,7 @@
 import { carRepository } from './carRepository.js';
 import CarService from './carService.js';
-import carAPI from './carAPI.js';
+import carRoutes from './carRoutes.js';
 
 const carService = new CarService(carRepository);
 
-export { carService, carAPI };
+export { carService, carRoutes };

@@ -12,6 +12,15 @@ class OrganizationService {
       businessName
     );
     await this.organizationRepository.create(organization);
+
+    return true;
+  }
+
+  async getByIdentifier(identifier) {
+    const organization =
+      await this.organizationRepository.getByIdentifier(identifier);
+
+    return organization;
   }
 }
 
