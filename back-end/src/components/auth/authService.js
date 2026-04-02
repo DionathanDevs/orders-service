@@ -18,7 +18,7 @@ class AuthService {
       throw new Error('E-mail nao encontrado');
     }
 
-    if (user.verify_code !== verify.verifyCodeInput) {
+    if (Number(user.verify_code) !== Number(verify.verifyCodeInput)) {
       throw new Error('Codigo invalido ou expirado, tente novamente');
     }
 
@@ -86,10 +86,9 @@ class AuthService {
     const user = new User(
       register.name,
       register.surname,
-      register.email,
-      register.password,
-      register.password,
-      register.cpf,
+      register.getEmail(),
+      register.getPassword(),
+      register.getCpf(),
       organization.id,
       verifyCode,
       verifyCodeDateExpire
@@ -103,7 +102,7 @@ class AuthService {
 
     emailService.emails.send({
       from: 'onboarding@resend.dev',
-      to: userCreated.email,
+      to: user.getEmail(),
       subject: 'Verique seu e-mail.',
       html: `<p>Seu codigo de verificacao: ${verifyCode}</strong>!</p>`, // dps substituir por um template oficial
     });

@@ -23,7 +23,7 @@ async function verifyCodeController(req, res) {
   } catch (err) {
     return res.status(403).json({
       success: false,
-      message: err || err.message,
+      message: err || err.message || 'Erro ao verificar usuario',
     });
   }
 }

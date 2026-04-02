@@ -19,7 +19,7 @@ class OrganizationRepository {
 
     const [rows] = await pool.execute(sql, [identifier]);
 
-    return rows;
+    return rows[0];
   }
 }
 
