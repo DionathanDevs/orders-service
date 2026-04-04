@@ -1,6 +1,6 @@
-import { clientRepository } from './clientRepository.js';
-import ClientService from './clientService.js';
-import clientRoutes from './clientRoutes.js';
+import { clientRepository } from './client.repository.js';
+import ClientService from './client.service.js';
+import clientRoutes from './client.routes.js';
 
 const clientService = new ClientService(clientRepository);
 

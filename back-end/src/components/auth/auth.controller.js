@@ -1,6 +1,6 @@
 import { authService } from './index.js';
-import Verify from './verifyCodeModel.js';
-import Register from './registerModel.js';
+import Verify from './verify.code.model.js';
+import Register from './register.model.js';
 
 async function verifyCodeController(req, res) {
   const { email, verifyCode } = req.body;

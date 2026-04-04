@@ -1,6 +1,6 @@
-import UserService from './userService.js';
-import { userRepository } from './userRepository.js';
-import userRoutes from './userRoutes.js';
+import UserService from './user.service.js';
+import { userRepository } from './user.repository.js';
+import userRoutes from './user.routes.js';
 
 const userService = new UserService(userRepository);
 

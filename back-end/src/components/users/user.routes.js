@@ -1,5 +1,5 @@
 import express from 'express';
-import { userController, userUpdateController } from './userController.js';
+import { userController, userUpdateController } from './user.controller.js';
 import { validateUserCreation } from '../../libraries/middlewares/users/validateUserCreation.js';
 import { validateUserUpdate } from '../../libraries/middlewares/users/validateUserUpdate.js';
 

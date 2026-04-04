@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import User from './userModel.js';
+import User from './user.model.js';
 import { hashData } from '../../libraries/utils/argon.js';
 import emailService from '../../libraries/email/email.js';
 import { transform } from '../../libraries/utils/date.js';

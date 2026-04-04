@@ -2,10 +2,14 @@ import 'dotenv/config';
 import pool from '../../libraries/database/conn.js';
 
 class UserRepository {
+  constructor(db) {
+    this.db = db;
+  }
+
   async create(user) {
     const sql =
       'INSERT INTO users (name, surname, email, password, cpf, organization, verify_code, verify_code_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    const [rows] = await pool.execute(sql, [
+    const [rows] = await this.db.execute(sql, [
       user.name,
       user.surname,
       user.getEmail(),
@@ -22,29 +26,29 @@ class UserRepository {
   async update(name, surname, email, id) {
     const sql = `UPDATE users SET name = ?, surname = ?, email = ? WHERE id = ?;`;
 
-    const [rows] = await pool.execute(sql, [name, surname, email, id]);
+    const [rows] = await this.db.execute(sql, [name, surname, email, id]);
 
     return rows;
   }
 
   async queryUserEmail(email) {
     const sql = 'SELECT email, id FROM users where email = ?';
-    const [rows] = await pool.execute(sql, [email]);
+    const [rows] = await this.db.execute(sql, [email]);
 
     return rows[0];
   }
 
   async userFindById(id) {
-    const sql = 'SELECT * users where id = ?';
+    const sql = 'SELECT * FROM users where id = ?';
 
-    const [rows] = await pool.execute(sql, [id]);
+    const [rows] = await this.db.execute(sql, [id]);
 
     return rows[0];
   }
 
   async queryUserCpf(cpf) {
     const sql = 'SELECT cpf FROM users where cpf = ?';
-    const [rows] = await pool.execute(sql, [cpf]);
+    const [rows] = await this.db.execute(sql, [cpf]);
 
     return rows[0];
   }
@@ -52,7 +56,7 @@ class UserRepository {
   async queryEmailAndPass(email) {
     const sql =
       'SELECT id, name, surname, email, password, organization FROM users where email = ?';
-    const [rows] = await pool.execute(sql, [email]);
+    const [rows] = await this.db.execute(sql, [email]);
 
     return rows[0];
   }
@@ -61,7 +65,7 @@ class UserRepository {
     const sql =
       'SELECT id, email, verify_code, verify_code_date FROM users where email = ?';
 
-    const [rows] = await pool.execute(sql, [verify.email]);
+    const [rows] = await this.db.execute(sql, [verify.email]);
 
     return rows[0];
   }
@@ -69,7 +73,7 @@ class UserRepository {
     const sql =
       'UPDATE users set active = ?, verify_code = ?, verify_code_date = ? where id = ? ';
 
-    const [rows] = await pool.execute(sql, [1, null, null, id]);
+    const [rows] = await this.db.execute(sql, [1, null, null, id]);
 
     return rows;
   }
@@ -78,7 +82,7 @@ class UserRepository {
     const sql =
       'SELECT id, name, surname, email, password, organization from users WHERE email = ?';
 
-    const [rows] = await pool.execute(sql, [login.getEmail()]);
+    const [rows] = await this.db.execute(sql, [login.getEmail()]);
 
     return rows[0];
   }
@@ -86,10 +90,10 @@ class UserRepository {
   async consultDataUser(id) {
     const sql = 'SELECT * from users where id = ?';
 
-    const [rows] = await pool.execute(sql, [id]);
+    const [rows] = await this.db.execute(sql, [id]);
 
     return rows[0];
   }
 }
 
-export const userRepository = new UserRepository();
+export const userRepository = new UserRepository(pool);

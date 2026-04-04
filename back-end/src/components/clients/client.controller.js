@@ -1,5 +1,5 @@
 import { clientService } from './index.js';
-import Client from './clientModel.js';
+import Client from './client.model.js';
 
 async function create(req, res) {
   const { name, surname, email, cpf } = req.body;

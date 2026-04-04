@@ -1,4 +1,4 @@
-import { organizationService } from './organizationService.js';
+import { organizationService } from './organization.service.js';
 
 async function createController(req, res) {
   const { identifier, corporateName, businessName } = req.body;

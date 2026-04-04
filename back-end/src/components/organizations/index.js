@@ -1,5 +1,5 @@
-import OrganizationService from './organizationService.js';
-import { organizationRepository } from './organizationRepository.js';
+import OrganizationService from './organization.service.js';
+import { organizationRepository } from './organization.repository.js';
 
 const organizationService = new OrganizationService(organizationRepository);
 

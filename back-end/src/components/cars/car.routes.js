@@ -1,7 +1,7 @@
 import express from 'express';
 import validateCarCreation from '../../libraries/middlewares/cars/validateCarCreation.js';
 import validateCarUpdate from '../../libraries/middlewares/cars/validateCarUpdate.js';
-import { carCreate, carUpdate } from './carController.js';
+import { carCreate, carUpdate } from './car.controller.js';
 
 const router = express.Router();
 

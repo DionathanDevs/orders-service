@@ -1,4 +1,4 @@
-import Organization from './organizationModel.js';
+import Organization from './organization.model.js';
 
 class OrganizationService {
   constructor(organizationRepository) {

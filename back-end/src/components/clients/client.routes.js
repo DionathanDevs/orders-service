@@ -1,5 +1,5 @@
 import express from 'express';
-import { create, update, getId, getAll } from './clientController.js';
+import { create, update, getId, getAll } from './client.controller.js';
 import {
   validateCreate,
   validateGetId,

@@ -3,7 +3,7 @@ import {
   verifyCodeController,
   loginController,
   registerController,
-} from './authController.js';
+} from './auth.controller.js';
 import { validateUserLogin } from '../../libraries/middlewares/login/validateUserLogin.js';
 import { validateCreateRegister } from '../../libraries/middlewares/register/validateRegister.js';
 
