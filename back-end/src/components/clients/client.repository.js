@@ -1,5 +1,3 @@
-import pool from '../../libraries/database/conn.js';
-
 class ClientRepository {
   constructor(db) {
     this.db = db;
@@ -51,4 +49,4 @@ class ClientRepository {
   }
 }
 
-export const clientRepository = new ClientRepository(pool);
+export default ClientRepository;

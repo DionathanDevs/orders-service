@@ -1,5 +1,3 @@
-import pool from '../../libraries/database/conn.js';
-
 class OrganizationRepository {
   constructor(db) {
     this.db = db;
@@ -26,4 +24,4 @@ class OrganizationRepository {
   }
 }
 
-export const organizationRepository = new OrganizationRepository(pool);
+export default OrganizationRepository;

@@ -1,6 +1,3 @@
-import 'dotenv/config';
-import pool from '../../libraries/database/conn.js';
-
 class UserRepository {
   constructor(db) {
     this.db = db;
@@ -96,4 +93,4 @@ class UserRepository {
   }
 }
 
-export const userRepository = new UserRepository(pool);
+export default UserRepository;
