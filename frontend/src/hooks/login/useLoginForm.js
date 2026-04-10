@@ -27,7 +27,11 @@ function useLoginForm() {
       console.log("Dados enviados com sucesso:", response.data);
       alert("Formulário enviado!");
     } catch (error) {
-      console.error("Motivo da recusa do servidor:", error.response?.data);
+      alert(error.response.data.message);
+      console.error(
+        "Erro:",
+        error.response.data.message,
+      );
     }
   }
 
