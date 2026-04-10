@@ -37,6 +37,7 @@ class AuthService {
 
   async verifyLogin(email, password) {
     const login = new Login(email, password);
+
     const user = await this.userRepository.verifyEmailandPass(login);
 
     if (!user) {

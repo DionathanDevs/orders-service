@@ -7,6 +7,9 @@ async function hashData(data) {
 }
 
 async function verifyHashData(data, dataInput) {
+  if (!data?.includes(`$`)) {
+    return null;
+  }
   return await argon2.verify(data, dataInput);
 }
 
