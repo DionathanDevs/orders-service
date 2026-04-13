@@ -1,4 +1,4 @@
-function Label({ value }) {
+function Label({value}) {
   return <label>{value}</label>;
 }
 

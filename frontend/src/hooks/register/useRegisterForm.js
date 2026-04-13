@@ -1,46 +1,39 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import axios from "axios";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+const api = "http://localhost:3000/api/v1/auth/register";
+const schema = z.object({
+  name: z.string(),
+  surname: z.string(),
+  email: z.email(),
+  password: z.string(),
+  cpf: z.string().min(11, "O Cpf deve ter no minimo 11 digitos."),
+  identifier: z.string(),
+  corporateName: z.string(),
+  businessName: z.string(),
+});
 
 function useRegisterForm() {
-  const [form, setForm] = useState({
-    name: "",
-    surname: "",
-    email: "",
-    password: "",
-    cpf: "",
-    identifier: "",
-    corporateName: "",
-    businessName: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
   });
 
-  function change(e) {
-    setForm({
-      ...form,
-      [e.target.value]: e.target.value,
-    });
-  }
-
-  async function submit(e) {
-    e.preventDefault();
+  async function submitRegister(data) {
     try {
-      const response = await axios.post({
-        method: "post",
-        url: "",
-        data: { ...form },
-      });
-
-      console.log(response);
-      alert("Enviado com sucesso!");
+      const response = await axios.post(api, data);
+      return console.log(response);
     } catch (err) {
-      console.log(err);
+      console.log(err.data);
+      throw Error(err);
     }
   }
 
-  return {
-    form,
-    change,
-    submit,
-  };
+  return { register, handleSubmit, errors, submitRegister };
 }
 
 export default useRegisterForm;

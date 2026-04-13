@@ -1,5 +1,5 @@
-function Input({ type, value, name, onChange}) {
-  return <input type={type} name={name} value={value} onChange={onChange}></input>;
+function Input({ type, name}) {
+  return <input type={type} name={name} forwardRef></input>;
 }
 
 export default Input;

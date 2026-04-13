@@ -1,45 +1,36 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import axios from "axios";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  email: z.email("Por favor, digite um e-mail válido."),
+  password: z.string().min(6, "A senha precisa ter no mínimo 6 caracteres"),
+});
+
+const api = "http://localhost:3000/api/v1/auth/login";
 
 function useLoginForm() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
   });
 
-  function change(e) {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  async function submit(e) {
-    e.preventDefault();
+  async function submitLogin(data) {
     try {
-      const response = await axios({
-        method: "post",
-        url: "http://localhost:3000/api/v1/auth/login",
-        data: {
-          ...form,
-        },
-      });
-      console.log("Dados enviados com sucesso:", response.data);
-      alert("Formulário enviado!");
-    } catch (error) {
-      alert(error.response.data.message);
-      console.error(
-        "Erro:",
-        error.response.data.message,
-      );
+      const response = await axios.post(api, data);
+      return console.log(response);
+    } catch (err) {
+      console.log(err);
+      console.log("err data:" + err.data);
+      throw Error(err);
     }
   }
 
-  return {
-    form,
-    change,
-    submit,
-  };
+  return { handleSubmit, register, errors, submitLogin };
 }
 
 export default useLoginForm;
