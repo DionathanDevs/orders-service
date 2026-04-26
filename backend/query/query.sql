@@ -46,3 +46,49 @@ CREATE TABLE clients (
     ON DELETE CASCADE
     ON UPDATE CASCADE 
 );
+
+CREATE TABLE orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    
+    requesting_user INT,
+    observation TEXT,
+    status INT, -- Esta será uma Foreign Key para a tabela order_status do seu desenho
+    
+    coin VARCHAR(10),
+    car_client_id INT, -- Acredito que seja o vínculo do carro com o cliente
+    
+    -- Dados de cancelamento
+    cancellation_date TIMESTAMP NULL DEFAULT NULL,
+    cancellation_user INT,
+    cancellation_reason TEXT,
+    
+    responsible_group INT,
+    
+    -- Auditoria e Datas no seu padrão exato
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    scheduling TIMESTAMP NULL DEFAULT NULL,
+    
+    -- Localização
+    head_office INT,
+    branch INT,
+    
+    -- Relacionamento com a Organização
+    organization INT,
+    
+    -- Amarração das Chaves Estrangeiras
+    FOREIGN KEY (organization) 
+        REFERENCES organizations (id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+        
+    FOREIGN KEY (requesting_user) 
+        REFERENCES users (id) 
+        ON DELETE SET NULL 
+        ON UPDATE CASCADE,
+        
+    FOREIGN KEY (cancellation_user) 
+        REFERENCES users (id) 
+        ON DELETE SET NULL 
+        ON UPDATE CASCADE
+);

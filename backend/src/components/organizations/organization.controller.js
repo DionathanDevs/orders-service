@@ -1,9 +1,9 @@
 import { organizationService } from './organization.service.js';
 
 async function createController(req, res) {
-  const { identifier, corporateName, businessName } = req.body;
-
   try {
+    const { identifier, corporateName, businessName } = req.body;
+
     const organization = await organizationService.create(
       identifier,
       corporateName,

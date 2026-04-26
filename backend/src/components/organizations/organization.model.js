@@ -4,6 +4,8 @@ class Organization {
     this.corporateName = corporateName;
     this.businessName = businessName;
   }
+
+  //methods in future
 }
 
 export default Organization;
