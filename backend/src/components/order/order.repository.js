@@ -12,16 +12,16 @@ class OrderRepository {
     `;
 
     const values = [
-      orderData.requesting_user,
+      orderData.getRequestingUser(),
       orderData.observation,
       orderData.status,
       orderData.coin,
-      orderData.car_client_id,
-      orderData.responsible_group,
+      orderData.getCarClientId(),
+      orderData.responsibleGroup,
       orderData.scheduling,
-      orderData.head_office,
+      orderData.headOffice,
       orderData.branch,
-      orderData.organization,
+      orderData.getOrganization(),
     ];
 
     const [result] = await this.db.execute(sql, values);

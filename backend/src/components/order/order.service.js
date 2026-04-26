@@ -1,11 +1,11 @@
 import Order from './order.model.js';
-
 class OrderService {
   constructor(orderRepository) {
     this.orderRepository = orderRepository;
   }
 
   async create(
+    id,
     requestingUser,
     observation,
     status,
@@ -22,8 +22,10 @@ class OrderService {
     branch,
     organization
   ) {
+    const dateScheduling = new Date(scheduling);
+
     const order = new Order(
-      null,
+      (id = null),
       requestingUser,
       observation,
       status,
@@ -35,13 +37,13 @@ class OrderService {
       responsibleGroup,
       creationDate,
       updateDate,
-      scheduling,
+      dateScheduling,
       headOffice,
       branch,
       organization
     );
 
-    await this.orderRepository(order);
+    await this.orderRepository.create(order);
   }
 }
 
