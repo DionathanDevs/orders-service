@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import routes from './src/routes/index.js';
+import { setupSwagger } from './src/libraries/swagger/swagger.js';
+
 const app = express();
 
 app.use(
@@ -9,6 +11,9 @@ app.use(
   })
 );
 app.use(express.json());
+
+// Inicia o Swagger na rota /api-docs
+setupSwagger(app);
 
 app.use(routes);
 

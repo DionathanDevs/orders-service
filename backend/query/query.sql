@@ -92,3 +92,60 @@ CREATE TABLE orders (
         ON DELETE SET NULL 
         ON UPDATE CASCADE
 );
+
+CREATE TABLE items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    description VARCHAR(255) NOT NULL,
+    ncm VARCHAR(20),
+    
+    requesting_user INT,
+    organization INT NOT NULL, -- O vínculo obrigatório
+    active BOOLEAN NOT NULL DEFAULT true,
+    
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (organization) 
+        REFERENCES organizations (id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+        
+    FOREIGN KEY (requesting_user) 
+        REFERENCES users (id) 
+        ON DELETE SET NULL 
+        ON UPDATE CASCADE
+);
+
+
+CREATE TABLE item_prices (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end_date TIMESTAMP NULL DEFAULT NULL,
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (item_id) 
+        REFERENCES items (id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    item_price_id INT NOT NULL,
+    charged_unit_price DECIMAL(10, 2) NOT NULL,
+    discount DECIMAL(10, 2) DEFAULT 0.00,
+    quantity DECIMAL(10, 2) NOT NULL,
+    
+    FOREIGN KEY (order_id) 
+        REFERENCES orders (id) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
+        
+    FOREIGN KEY (item_price_id) 
+        REFERENCES item_prices (id) 
+        ON DELETE RESTRICT 
+        ON UPDATE CASCADE
+);

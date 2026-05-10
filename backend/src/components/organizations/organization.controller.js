@@ -1,4 +1,4 @@
-import { organizationService } from './organization.service.js';
+import { organizationService } from './index.js';
 
 async function createController(req, res) {
   try {
