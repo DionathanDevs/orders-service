@@ -1,0 +1,733 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Orders Service API",
+    "version": "1.0.0",
+    "description": "Documentação da API do SaaS de Oficinas"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Servidor Local (Desenvolvimento)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Autenticação e Registro"
+    },
+    {
+      "name": "Users",
+      "description": "Gerenciamento de Usuários internos"
+    },
+    {
+      "name": "Organizations",
+      "description": "Gerenciamento de Organizações"
+    },
+    {
+      "name": "Clients",
+      "description": "Gerenciamento de clientes"
+    },
+    {
+      "name": "Cars",
+      "description": "Gerenciamento de veículos"
+    },
+    {
+      "name": "Items",
+      "description": "Gerenciamento de itens e serviços"
+    },
+    {
+      "name": "Orders",
+      "description": "Gerenciamento de Ordens de Serviço"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/auth/verify": {
+      "post": {
+        "summary": "Verifica o código de ativação do usuário",
+        "tags": ["Auth"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "code"],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Conta ativada com sucesso."
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login de usuário",
+        "tags": ["Auth"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Retorna o token JWT e dados do usuário."
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Registra um novo usuário e organização",
+        "tags": ["Auth"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "surname",
+                  "email",
+                  "password",
+                  "cpf",
+                  "identifier",
+                  "corporateName",
+                  "businessName"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "João"
+                  },
+                  "surname": {
+                    "type": "string",
+                    "example": "Silva"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "joao.silva@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "senhaSegura123"
+                  },
+                  "cpf": {
+                    "type": "string",
+                    "example": "12345678901"
+                  },
+                  "identifier": {
+                    "type": "string",
+                    "description": "CNPJ da empresa",
+                    "example": "12345678000199"
+                  },
+                  "corporateName": {
+                    "type": "string",
+                    "description": "Razão Social",
+                    "example": "Oficina Mecânica São José LTDA"
+                  },
+                  "businessName": {
+                    "type": "string",
+                    "description": "Nome Fantasia",
+                    "example": "Oficina São José"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registro criado, código de verificação enviado."
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "summary": "Cria um novo usuário interno para a organização",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "password"],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado."
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "summary": "Atualiza os dados de um usuário",
+        "tags": ["Users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado."
+          }
+        }
+      }
+    },
+    "/organizations": {
+      "post": {
+        "summary": "Cria uma organização independentemente (Normalmente feito no /auth/register)",
+        "tags": ["Organizations"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["identifier", "corporateName", "businessName"],
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "description": "CNPJ ou CPF da organização",
+                    "example": "12345678000199"
+                  },
+                  "corporateName": {
+                    "type": "string",
+                    "description": "Razão Social",
+                    "example": "Oficina Mecânica São José LTDA"
+                  },
+                  "businessName": {
+                    "type": "string",
+                    "description": "Nome Fantasia",
+                    "example": "Oficina São José"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Organização criada."
+          }
+        }
+      }
+    },
+    "/clients": {
+      "post": {
+        "summary": "Cria um novo cliente",
+        "tags": ["Clients"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "document"],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "document": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cliente criado com sucesso."
+          }
+        }
+      },
+      "get": {
+        "summary": "Lista todos os clientes",
+        "tags": ["Clients"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de clientes retornada."
+          }
+        }
+      }
+    },
+    "/clients/{id}": {
+      "put": {
+        "summary": "Atualiza um cliente",
+        "tags": ["Clients"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "document": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cliente atualizado com sucesso."
+          }
+        }
+      },
+      "get": {
+        "summary": "Busca um cliente pelo ID",
+        "tags": ["Clients"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente retornado com sucesso."
+          }
+        }
+      }
+    },
+    "/cars": {
+      "post": {
+        "summary": "Cria um novo veículo",
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["model", "brand"],
+                "properties": {
+                  "model": {
+                    "type": "string"
+                  },
+                  "brand": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Carro criado com sucesso."
+          }
+        }
+      }
+    },
+    "/cars/{id}": {
+      "put": {
+        "summary": "Atualiza um veículo",
+        "tags": ["Cars"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "model": {
+                    "type": "string"
+                  },
+                  "brand": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "203": {
+            "description": "Carro atualizado com sucesso."
+          }
+        }
+      }
+    },
+    "/items": {
+      "post": {
+        "summary": "Cria um novo item",
+        "tags": ["Items"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["description"],
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "example": "Troca de Óleo"
+                  },
+                  "ncm": {
+                    "type": "string",
+                    "example": "27101932"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Item criado com sucesso."
+          },
+          "400": {
+            "description": "Erro de validação ou de negócio."
+          }
+        }
+      },
+      "get": {
+        "summary": "Lista todos os itens da organização",
+        "tags": ["Items"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de itens."
+          }
+        }
+      }
+    },
+    "/items/{id}": {
+      "put": {
+        "summary": "Atualiza um item existente",
+        "tags": ["Items"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do item"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["description"],
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "example": "Troca de Óleo - Sintético 5W40"
+                  },
+                  "ncm": {
+                    "type": "string",
+                    "example": "27101932"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado com sucesso."
+          },
+          "400": {
+            "description": "Erro de validação."
+          }
+        }
+      },
+      "get": {
+        "summary": "Busca um item pelo ID",
+        "tags": ["Items"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do item"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Item retornado com sucesso."
+          },
+          "404": {
+            "description": "Item não encontrado."
+          }
+        }
+      }
+    },
+    "/order": {
+      "post": {
+        "summary": "Cria uma nova ordem de serviço",
+        "tags": ["Orders"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "requestingUser",
+                  "observation",
+                  "carClientId",
+                  "organization"
+                ],
+                "properties": {
+                  "requestingUser": {
+                    "type": "number",
+                    "description": "ID do usuário que está criando a ordem",
+                    "example": 1
+                  },
+                  "observation": {
+                    "type": "string",
+                    "description": "Observações sobre a ordem de serviço",
+                    "example": "Veículo chegou com barulho na suspensão"
+                  },
+                  "carClientId": {
+                    "type": "number",
+                    "description": "ID do carro/cliente vinculado à ordem",
+                    "example": 2
+                  },
+                  "organization": {
+                    "type": "number",
+                    "description": "ID da organização (oficina)",
+                    "example": 1
+                  },
+                  "status": {
+                    "type": "number",
+                    "description": "Status da ordem (1 por padrão)",
+                    "example": 1
+                  },
+                  "coin": {
+                    "type": "string",
+                    "description": "Moeda utilizada (BRL por padrão)",
+                    "example": "BRL"
+                  },
+                  "scheduling": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Data e hora do agendamento (ISO 8601)",
+                    "example": "2024-05-15T14:30:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ordem criada com sucesso."
+          }
+        }
+      }
+    }
+  }
+}
